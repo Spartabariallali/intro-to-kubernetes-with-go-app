@@ -78,3 +78,21 @@ eval $(minikube docker-env)
 
 
 ![minikube-images](imagesmd/minikube-images.jpeg)
+
+### Running the hello-go app in MiniKube
+
+- firstly, we create a new deployment resource named hello-go. The deployment will run one pod by default and that pod will start the container with the hello-go images we built inside minikube's environment.
+
+```
+kubectl create deployment hello-go --image=hello-go
+```
+![deployment](imagesmd/minikube-deployment.jpeg)
+
+
+- once the deployment is created, you can check on its status with
+
+```
+kubectl get deployment hello-go
+```
+
+![check-status](imagesmd/check-status.jpeg)
