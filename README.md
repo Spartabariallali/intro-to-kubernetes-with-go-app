@@ -27,13 +27,16 @@ ENTRYPOINT ["./hello"]
 ```
 
 - we create a multi-stage build as the app is only small and doesnt require much for it to operate
+
 - To build the container from the `Dockerfile` we run the following command:
 
-```docker build -t hello-go
+```
+docker build -t hello-go
 ```
 - To run the container and expose the internal port to your localhost, run the command:
 
-``` docker run --name hello-g0 --rm -p 8180:8180 hello-go
+```
+docker run --name hello-g0 --rm -p 8180:8180 hello-go
 ```
 
 ## Deploying Hello-go app in Kubernetes
@@ -42,17 +45,20 @@ ENTRYPOINT ["./hello"]
 
 - If you're on mac, you can download minikube with the following command:
 
-``` brew install minikube
+```
+ brew install minikube
 ```
 
 - If you're on windows, you can install minikube with chocolatey:
 
-``` choco install MiniKube
+```
+choco install MiniKube
 ```
 
 ### Starting Minikube
 
 - Starting minikube is simple:
 
-``` minikube start
+```
+ minikube start
 ```
