@@ -27,3 +27,11 @@ ENTRYPOINT ["./hello"]
 ```
 
 - we create a multi-stage build as the app is only small and doesnt require much for it to operate
+- To build the container from the `Dockerfile` we run the following command:
+
+```docker build -t hello-go
+```
+- To run the container and expose the internal port to your localhost, run the command:
+
+``` docker run --name hello-g0 --rm -p 8180:8180 hello-go
+```
