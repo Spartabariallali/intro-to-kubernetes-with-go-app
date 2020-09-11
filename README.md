@@ -62,3 +62,19 @@ choco install MiniKube
 ```
  minikube start
 ```
+
+### Building the hello-go container in Minikube
+
+- Because minikube is essential a seperate VM on your local machine, it does not have access to your Docker registry and therefore if you attempt to pull the image inside the minikube kubernetes cluster, you will face an error
+
+- to overcome this error, it is recommended that images are built inside the minikube environment and to do this we need to set our local docker CLI to use minikube's docker daemon:
+
+```
+eval $(minikube docker-env)
+```
+
+
+- if your run ``` docker images``` now you will docker images that are found in the minikube environment
+
+
+![minikube-images](imagesmd/minikube-images.jpeg)
