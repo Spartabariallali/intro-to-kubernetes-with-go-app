@@ -35,3 +35,24 @@ ENTRYPOINT ["./hello"]
 
 ``` docker run --name hello-g0 --rm -p 8180:8180 hello-go
 ```
+
+## Deploying Hello-go app in Kubernetes
+
+- This example will show how to run a single container into kubernetes, using a small local kubernetes environment - MiniKube
+
+- If you're on mac, you can download minikube with the following command:
+
+``` brew install minikube
+```
+
+- If you're on windows, you can install minikube with chocolatey:
+
+``` choco install MiniKube
+```
+
+### Starting Minikube
+
+- Starting minikube is simple:
+
+``` minikube start
+```
