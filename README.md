@@ -86,7 +86,7 @@ eval $(minikube docker-env)
 ```
 kubectl create deployment hello-go --image=hello-go
 ```
-![deployment](imagesmd/minikube-deployment.jpeg)
+![deployment](imagesmd/create-deployment.jpeg)
 
 
 - once the deployment is created, you can check on its status with
