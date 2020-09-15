@@ -18,7 +18,8 @@
 ## 2. Pre_task
 - After we set the varibales, we ensure minikube is running in a `pre_task` section of the playbook.
 - `pre_tasks` will always run before tasks
-
+- first we run the `minikube status` command and store it in the `minikube_status` variable
+- the second `name` instructions set out that in there is no output from the minikube status command, or if it does not contain the word 'Running' in it, the task will run the command `minikube start` and for the command to complete
 
 ```
 pre_tasks:
@@ -31,4 +32,30 @@ pre_tasks:
   - name: Start Minikube if it's not running.
     command: minikube start
     when: "not minikube_status.stdout or 'Running' not in minikube_status.stdout"
+```
+
+## 3. Building the container images in minikube with ansible
+- the first task checks if there is an image wiht the `image_name` variable defined earlier.
+- Because we are running the playbook on `localhost`, but minikube has its own docker environment, we use ansible's shell module to redirect the minikube environment.
+- In the `shell` command we use the vertical pipe `|` to indicate to the YAML parser it should store the following lines as multi-line scalar.
+- we store the output in `image_hash` from the `docker images` command, we can build the docker image - but only if it not already built.
+- the `when` condition says "if theres no stdout returned from the `docker images` command assume the image doest exist yet."
+- Because this playbook is in a director adjacent to the `hello-go` example (which contains the `Dockerfile`)
+- the context passed to the `docker build` command is `../hello-go` this directs Docker to look for a dockerfile inside the hello-go directory adjacent to this playbok's `hello-go-automation` directory. 
+
+```
+tasks:
+  # Build the hello-go Docker image inside Minikube's environment.
+  - name: Get existing image hash.
+    shell: |
+      eval $(minikube docker-env)
+      docker images -q {{ image_name }}
+    register: image_hash
+    changed_when: false
+
+  - name: Build image if it's not already built.
+    shell: |
+      eval $(minikube docker-env)
+      docker build -t {{ image_name }} ../hello-go
+    when: not image_hash.stdout
 ```
