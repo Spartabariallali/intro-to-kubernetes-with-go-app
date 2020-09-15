@@ -41,7 +41,7 @@ pre_tasks:
 - we store the output in `image_hash` from the `docker images` command, we can build the docker image - but only if it not already built.
 - the `when` condition says "if theres no stdout returned from the `docker images` command assume the image doest exist yet."
 - Because this playbook is in a director adjacent to the `hello-go` example (which contains the `Dockerfile`)
-- the context passed to the `docker build` command is `../hello-go` this directs Docker to look for a dockerfile inside the hello-go directory adjacent to this playbok's `hello-go-automation` directory. 
+- the context passed to the `docker build` command is `../hello-go` this directs Docker to look for a dockerfile inside the hello-go directory adjacent to this playbok's `hello-go-automation` directory.
 
 ```
 tasks:
@@ -58,4 +58,73 @@ tasks:
       eval $(minikube docker-env)
       docker build -t {{ image_name }} ../hello-go
     when: not image_hash.stdout
+```
+
+## 4. Installing OpenShift to create Kubernetes resource
+- `brew install openshift-cli`
+- Ansible makes it easy to manage resources with its k8s module. the module uses openshift python client to interact with kubernetes' API.
+- Once its installed you can pass a full Kubernetes resource defintion to the k8s module.
+
+```
+# Create Kubernetes resources to run Hello Go.
+- name: Create a Deployment for Hello Go.
+  k8s:
+    state: present
+    definition:
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: hello-go
+        namespace: default
+      spec:
+        replicas: 1
+        selector:
+          matchLabels:
+            app: hello-go
+        template:
+          metadata:
+            labels:
+              app: hello-go
+          spec:
+            containers:
+            - name: hello-go
+              image: "{{ image_name }}"
+              imagePullPolicy: IfNotPresent
+              ports:
+              - containerPort: 8180
+```
+
+
+## 5. Create service that exposes via cluster LoadBalancer
+
+```
+- name: Create a Service for Hello Go.
+  k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: hello-go
+        namespace: default
+      spec:
+        type: LoadBalancer
+        ports:
+        - port: 8180
+          targetPort: 8180
+        selector:
+          app: hello-go
+  ```
+
+## 6. Exposing the service to the host using minikube Service
+
+```
+post_tasks:
+  - name: Expose Hello Go on the host via Minikube.
+    command: minikube service hello-go --url=true
+    changed_when: false
+    register: minikube_service
+
+  - debug:
+      msg: "Hello Go URL: {{ minikube_service['stdout_lines'][0] }}"
 ```
