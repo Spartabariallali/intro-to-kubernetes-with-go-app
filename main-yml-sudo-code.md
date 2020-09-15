@@ -128,3 +128,28 @@ post_tasks:
   - debug:
       msg: "Hello Go URL: {{ minikube_service['stdout_lines'][0] }}"
 ```
+
+## 7. Automating the scaling via existing deployment spec
+
+- create another variable in `vars` called `replicas`
+- set `replicas: 4`
+
+```
+vars:
+  ansible_python_interpreter: '{{ ansible_playbook_python }}'
+  image_name: hello-go
+  replicas: 4
+```
+
+- place the newly created replicas variable in the deployment definition's `spec.replicas`
+
+```
+spec:
+  replicas: "{{ replicas }}"
+  selector:
+    matchLabels:
+      app: hello-go
+```
+## 8. Checking the pods running in the cluser
+
+- ` kubectl get pods -l app=hello-go`
