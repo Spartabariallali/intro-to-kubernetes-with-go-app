@@ -5,7 +5,7 @@
   vars:
     ansible_python_interpreter: '{{ ansible_playbook_python }}'
     image_name: hello-go
-    replicas: 4
+    replicas: 1
 
   pre_tasks:
     - name: Check Minikube's status.

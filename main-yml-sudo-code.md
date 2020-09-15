@@ -153,3 +153,29 @@ spec:
 ## 8. Checking the pods running in the cluser
 
 - ` kubectl get pods -l app=hello-go`
+
+---
+
+## Scaling a deployment with Ansible's k8s_scale module
+
+- Create a new playbook named `scale-k8s_scale.yml` in the same directory as the `main.ym;`
+
+```
+---
+- hosts: localhost
+  gather_facts: false
+
+  vars:
+    ansible_python_interpreter: '{{ ansible_playbook_python }}'
+    replicas: 4
+
+  tasks:
+    - name: scale the hello-go deployment with k8s_scale
+      k8s_scale:
+        api_version: v1
+        kind: Deployment
+        name: hello-go
+        namespace: default
+        replicas: "{{ replicas }}"
+        wait: false
+```
