@@ -179,3 +179,7 @@ spec:
         replicas: "{{ replicas }}"
         wait: false
 ```
+
+---
+
+## Ansible Managers containers
