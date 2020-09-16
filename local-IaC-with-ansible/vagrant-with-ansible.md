@@ -24,3 +24,6 @@ kube3 ansible_host=192.168.7.4 kubernetes_role=node
 ansible_ssh_user=vagrant
 ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
 ```
+### Building a server with roles
+
+-
