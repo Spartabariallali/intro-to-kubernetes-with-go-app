@@ -1,4 +1,7 @@
 ## Small Kubernetes cluster architecture
 
 
-![vagrant-ansible](imagesmd/kubernetes.jpeg)
+
+
+
+![vagrant-ansible](imagesmd/local-IaC-with-ansible/kubernetes.jpeg)
