@@ -2,6 +2,4 @@
 
 
 
-
-
-![vagrant-ansible](imagesmd/local-IaC-with-ansible/kubernetes.jpeg)
+![vagrant-ansible](/Users/iAllali/Desktop/code/into-to-kubernetes-go-app/imagesmd/kubernetes.jpeg)
