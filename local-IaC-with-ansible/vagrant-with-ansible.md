@@ -66,6 +66,50 @@ ansible-galaxy install -r requirements.yml
     - geerlingguy.Kubernetes
 ```
 
+### Role Configuration 
+
+- create a vars directory with a main variables file inside `vars/main.ym` and reference it inside the main.yml playbook.
+
+```
+vars_files:
+    - vars/main.yml
+``` 
+- In the vars directory we need to establish the two Docker role override variables 
+
+```
+---
+# docker configuration
+docker_install_compose: false
+docker_users:
+  - vagrant
+```
+
+- Next we need to disable swap (by default its enabled) we do that by setting `swap_file_status` to absent and providing the path to the swap file:
+
+```
+# swap configuration
+swap_file_state: absent
+swap_file_path: /dev/mapper/packer--debian--10--amd64--vg-swap_1
+```
+- Kubernetes configuration 
+
+```
+# Kubernetes configuration
+kubernetes_version: '1.16'
+kubernetes_allow_pods_on_master: false
+kubernetes_apiserver_advertise_address: '192.168.7.2'
+kubernetes_kubelet_extra_args: '--node-ip={{ ansible_host }}'
+```
+### Running the cluster build playbook 
+
+```
+ansible-playbook -i inventory main.yml 
+```
+
+
+
+
+
 
 
 
