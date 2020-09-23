@@ -24,6 +24,49 @@ kube3 ansible_host=192.168.7.4 kubernetes_role=node
 ansible_ssh_user=vagrant
 ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key
 ```
-### Building a server with roles
+### Building a server with roles - using ansible galaxy
+For an indiviudal Kubernetes cluster server, there a few basic things you have to configure:
+- Configure basic security such as SSH 
+- Disbale swap memory 
+- Install Docker 
+- Install Kuberentes 
 
--
+``` 
+Create a requirements.yml file which lists each of the roles 
+---
+roles:
+   - name: geerlingguy.security
+   - name: geerlingguy.swap
+   - name: geerlingguy.docker
+   - name: geerlingguy.Kubernetes
+```
+
+- Create a ansible.cfg file defining the roles_path so the role will be stored in the project directory 
+
+```
+[defaults]
+
+roles_path = ./roles
+nocows = 1
+host_key_checking = False 
+```
+- Download the roles from Ansible Galaxy 
+
+```
+ansible-galaxy install -r requirements.yml 
+```
+
+- One the roles are available locally we can include them in our main.yml file 
+
+```
+  roles:
+    - geerlingguy.security
+    - geerlingguy.swap
+    - geerlingguy.docker
+    - geerlingguy.Kubernetes
+```
+
+
+
+
+
